@@ -60,7 +60,7 @@ export function IntroGeneratorSection() {
           AI-Powered Insights
         </h2>
         <p className="mt-4 text-muted-foreground md:text-lg">
-          Curious? Let AI generate some insights about me based on my portfolio.
+          Curious? Let AI generate some insights about me based on my portfolio. Click a button to start.
         </p>
       </div>
       <div className="mt-8 flex flex-col items-center gap-6">

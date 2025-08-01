@@ -19,6 +19,9 @@ const fontHeadline = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Mir Mohmmad Luqman - Web3 Developer Portfolio",
   description: "Personal portfolio of Mir Mohmmad Luqman, a Web3 Developer specializing in Smart Contracts, Security, and Frontend Integration.",
+  openGraph: {
+    images: ['https://pbs.twimg.com/profile_images/1920434245127774208/gcxmtzLx_400x400.jpg'],
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+       <head>
+        <link rel="icon" href="https://pbs.twimg.com/profile_images/1920434245127774208/gcxmtzLx_400x400.jpg" sizes="any" />
+      </head>
       <body className={cn("font-body antialiased", fontBody.variable, fontHeadline.variable)}>
         {children}
         <Toaster />

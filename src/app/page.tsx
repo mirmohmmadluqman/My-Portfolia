@@ -5,6 +5,7 @@ import { ProjectsSection } from "@/components/sections/projects";
 import { SkillsSection } from "@/components/sections/skills";
 import { PageFooter } from "@/components/page-footer";
 import { PageHeader } from "@/components/page-header";
+import { CustomIntroGeneratorSection } from "@/components/sections/custom-intro-generator";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <SkillsSection />
         <ProjectsSection />
         <IntroGeneratorSection />
+        <CustomIntroGeneratorSection />
         <ContactSection />
       </main>
       <PageFooter />
