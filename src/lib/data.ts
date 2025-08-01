@@ -1,3 +1,4 @@
+
 export const skills = [
   { name: "Solidity", proficiency: 95, category: "EVM" },
   { name: "Foundry", proficiency: 90, category: "EVM" },
@@ -24,21 +25,21 @@ export const projects = {
       title: "PrivateKeyTextEncryption",
       description: "Tool for text encryption using private keys.",
       githubUrl: "https://github.com/mirmohmmadluqman/PrivateKeyTextEncryption",
-      liveUrl: "https://privatekeytextencryption.netlify.app/",
+      liveUrl: "https://pkte.netlify.app/",
       type: "Original (Real)",
     },
     {
       title: "DailyCalendar",
       description: "A simple calendar application for daily planning.",
       githubUrl: "https://github.com/mirmohmmadluqman/React-1DailyCalendar",
-      liveUrl: "https://react-1dailycalendar.netlify.app/",
+      liveUrl: "https://1dailycalendar.netlify.app/",
       type: "Original (Real)",
     },
     {
       title: "HedberaTimer",
       description: "Timer utility integrated with Hedera Hashgraph.",
       githubUrl: "https://github.com/mirmohmmadluqman/HedberaTimer",
-      liveUrl: "https://hedberratimer.netlify.app/",
+      liveUrl: "https://hedberatimer.netlify.app/",
       type: "Original (Real)",
     },
     {
