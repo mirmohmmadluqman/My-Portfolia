@@ -1,14 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { projects } from "@/lib/data";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 
 export function ProjectsSection() {
+  const [showAllOriginal, setShowAllOriginal] = useState(false);
+  const [showAllOther, setShowAllOther] = useState(false);
+
+  const originalProjectsToShow = showAllOriginal ? projects.original : projects.original.slice(0, 4);
+  const otherProjectsToShow = showAllOther ? projects.other : projects.other.slice(0, 4);
+
   const ProjectCard = ({ project }: { project: typeof projects.original[0] }) => (
     <Card className="flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1">
       <CardHeader>
@@ -64,17 +71,33 @@ export function ProjectsSection() {
           </TabsList>
           <TabsContent value="original" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.original.map((project) => (
+              {originalProjectsToShow.map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
+            {projects.original.length > 4 && (
+              <div className="mt-8 text-center">
+                <Button variant="outline" onClick={() => setShowAllOriginal(!showAllOriginal)}>
+                  {showAllOriginal ? <ChevronUp className="mr-2 h-4 w-4" /> : <ChevronDown className="mr-2 h-4 w-4" />}
+                  {showAllOriginal ? "Show Less" : "Show More"}
+                </Button>
+              </div>
+            )}
           </TabsContent>
           <TabsContent value="other" className="mt-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.other.map((project) => (
+              {otherProjectsToShow.map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
+             {projects.other.length > 4 && (
+              <div className="mt-8 text-center">
+                <Button variant="outline" onClick={() => setShowAllOther(!showAllOther)}>
+                  {showAllOther ? <ChevronUp className="mr-2 h-4 w-4" /> : <ChevronDown className="mr-2 h-4 w-4" />}
+                  {showAllOther ? "Show Less" : "Show More"}
+                </Button>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
