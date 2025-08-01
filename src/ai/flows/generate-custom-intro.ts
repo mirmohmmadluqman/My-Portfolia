@@ -31,7 +31,12 @@ export async function generateCustomIntro(
 
 const professionalAssistantPrompt = ai.definePrompt({
   name: 'professionalAssistantPrompt',
-  input: {schema: GenerateCustomIntroInputSchema},
+  input: {schema: z.object({
+    query: z.string(),
+    socialLinks: z.any(),
+    skills: z.any(),
+    projects: z.any(),
+  })},
   output: {schema: GenerateCustomIntroOutputSchema},
   prompt: `You are a professional assistant for Mir Mohmmad Luqman, a Web3 Developer. Your role is to answer questions about him based ONLY on the context provided below.
 
@@ -79,34 +84,28 @@ const generateCustomIntroFlow = ai.defineFlow(
     outputSchema: GenerateCustomIntroOutputSchema,
   },
   async (input) => {
-    // This is the "easter egg" code.
     const activationCode = '155309507';
+    let userQuery = input.query;
+    let isGeneralMode = false;
 
-    if (input.query.trim() === activationCode) {
-        return { answer: "Welcome! General assistant mode activated. How can I help you today?" };
+    // Check if the query starts with the activation code and a space.
+    if (userQuery.startsWith(activationCode + ' ')) {
+      isGeneralMode = true;
+      // Remove the activation code and space from the query.
+      userQuery = userQuery.substring(activationCode.length + 1);
+    } else if (userQuery.trim() === activationCode) {
+        // If only the code is entered, send a welcome message.
+        return { answer: "Welcome! General assistant mode unlocked for your next query. How can I help you?" };
+    }
+
+    if (isGeneralMode) {
+      const { output } = await generalAssistantPrompt({ query: userQuery });
+      return output!;
     }
     
-    const isGeneralQuery = await ai.generate({
-        prompt: `Does the following query ask for general knowledge or something unrelated to a person's professional life? Answer with only "yes" or "no". Query: "${input.query}"`,
-        model: 'googleai/gemini-2.0-flash',
-        output: {
-            format: 'text'
-        }
-    });
-
-    const isGeneral = isGeneralQuery.text.toLowerCase().includes('yes');
-
-    if (isGeneral) {
-         // Check if a previous query was the activation code, which is not implemented in this stateless setup
-         // For now, we assume this flow is for general queries if it's not about the person.
-         // A more robust solution would involve session management.
-         // Let's check for a magic word in the session or a flag. For now, we will just use a simpler check.
-         const { output } = await generalAssistantPrompt({ query: "Answer this query: " + input.query });
-         return output!;
-    }
-    
+    // Default to professional assistant.
     const {output} = await professionalAssistantPrompt({
-      ...input,
+      query: userQuery,
       // Augment the prompt input with data from our app
       socialLinks,
       skills,
