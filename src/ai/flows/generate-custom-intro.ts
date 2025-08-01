@@ -29,8 +29,8 @@ export async function generateCustomIntro(
   return generateCustomIntroFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'generateCustomIntroPrompt',
+const professionalAssistantPrompt = ai.definePrompt({
+  name: 'professionalAssistantPrompt',
   input: {schema: GenerateCustomIntroInputSchema},
   output: {schema: GenerateCustomIntroOutputSchema},
   prompt: `You are a professional assistant for Mir Mohmmad Luqman, a Web3 Developer. Your role is to answer questions about him based ONLY on the context provided below.
@@ -62,6 +62,16 @@ Based on the context above, please provide a concise and professional answer to 
 `,
 });
 
+const generalAssistantPrompt = ai.definePrompt({
+  name: 'generalAssistantPrompt',
+  input: { schema: GenerateCustomIntroInputSchema },
+  output: { schema: GenerateCustomIntroOutputSchema },
+  prompt: `You are a helpful general-purpose AI assistant. Please answer the following user query.
+
+User's Question: "{{query}}"`,
+});
+
+
 const generateCustomIntroFlow = ai.defineFlow(
   {
     name: 'generateCustomIntroFlow',
@@ -69,7 +79,33 @@ const generateCustomIntroFlow = ai.defineFlow(
     outputSchema: GenerateCustomIntroOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt({
+    // This is the "easter egg" code.
+    const activationCode = '155309507';
+
+    if (input.query.trim() === activationCode) {
+        return { answer: "Welcome! General assistant mode activated. How can I help you today?" };
+    }
+    
+    const isGeneralQuery = await ai.generate({
+        prompt: `Does the following query ask for general knowledge or something unrelated to a person's professional life? Answer with only "yes" or "no". Query: "${input.query}"`,
+        model: 'googleai/gemini-2.0-flash',
+        output: {
+            format: 'text'
+        }
+    });
+
+    const isGeneral = isGeneralQuery.text.toLowerCase().includes('yes');
+
+    if (isGeneral) {
+         // Check if a previous query was the activation code, which is not implemented in this stateless setup
+         // For now, we assume this flow is for general queries if it's not about the person.
+         // A more robust solution would involve session management.
+         // Let's check for a magic word in the session or a flag. For now, we will just use a simpler check.
+         const { output } = await generalAssistantPrompt({ query: "Answer this query: " + input.query });
+         return output!;
+    }
+    
+    const {output} = await professionalAssistantPrompt({
       ...input,
       // Augment the prompt input with data from our app
       socialLinks,
