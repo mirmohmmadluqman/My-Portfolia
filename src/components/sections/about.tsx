@@ -18,7 +18,7 @@ export function AboutSection() {
         </div>
         <div className="flex justify-center">
           <Image 
-            src="https://placehold.co/450x450.png"
+            src="https://pbs.twimg.com/profile_images/1920434245127774208/gcxmtzLx_400x400.jpg"
             alt="Mir Mohmmad Luqman"
             width={450}
             height={450}
